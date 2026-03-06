@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">TokenMint</string>
+
+    <!-- Token List -->
+    <string name="no_tokens_title">还没有令牌</string>
+    <string name="no_tokens_description">添加您的第一个身份验证令牌</string>
+    <string name="search_tokens">搜索令牌</string>
+    <string name="add_manually">手动添加</string>
+    <string name="scan_qr_code">扫描二维码</string>
+    <string name="delete">删除</string>
+    <string name="pin">置顶</string>
+    <string name="unpin">取消置顶</string>
+    <string name="copied">已复制！</string>
+
+    <!-- Add Token -->
+    <string name="add_token">添加令牌</string>
+    <string name="issuer_hint">发行方（如 GitHub）</string>
+    <string name="account_hint">账户（如 user@email.com）</string>
+    <string name="secret_hint">Base32 密钥</string>
+    <string name="account_info">账户信息</string>
+    <string name="secret_key">密钥</string>
+    <string name="advanced">高级选项</string>
+    <string name="digits">位数</string>
+    <string name="period">周期</string>
+    <string name="algorithm">算法</string>
+    <string name="save">保存</string>
+
+    <!-- Scanner -->
+    <string name="scanner_title">扫描二维码</string>
+    <string name="camera_not_available">相机不可用</string>
+    <string name="camera_not_available_desc">此设备不支持条码扫描或相机权限被拒绝。</string>
+    <string name="scan_error">扫描错误</string>
+    <string name="invalid_qr_code">无效的二维码。需要 otpauth:// 格式的 URL。</string>
+    <string name="scan_again">重新扫描</string>
+    <string name="ok">确定</string>
+
+    <!-- Lock Screen -->
+    <string name="tap_to_unlock">点击解锁</string>
+    <string name="unlock_vault">解锁您的保险库</string>
+
+    <!-- Settings -->
+    <string name="settings">设置</string>
+    <string name="security">安全</string>
+    <string name="biometric_unlock">生物识别解锁</string>
+    <string name="preferences">偏好设置</string>
+    <string name="haptic_feedback">触觉反馈</string>
+    <string name="theme">主题</string>
+    <string name="language">语言</string>
+    <string name="theme_system">跟随系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="lang_system">跟随系统</string>
+    <string name="lang_en">English</string>
+    <string name="lang_zh">简体中文</string>
+    <string name="data">数据</string>
+    <string name="export_vault">导出保险库</string>
+    <string name="import_vault">导入保险库</string>
+    <string name="about">关于</string>
+    <string name="version">版本</string>
+    <string name="tokens_count">令牌数量</string>
+    <string name="import_complete">导入完成</string>
+    <string name="import_success">成功导入 %d 个令牌。</string>
+    <string name="import_failed">导入失败：%s</string>
+    <string name="cancel">取消</string>
+
+    <!-- Errors -->
+    <string name="error_retry">重试</string>
+    <string name="something_went_wrong">出了点问题</string>
+
+    <!-- Accessibility -->
+    <string name="cd_add_token">添加新令牌</string>
+    <string name="cd_scan_qr">扫描二维码</string>
+    <string name="cd_settings">打开设置</string>
+    <string name="cd_copy_code">复制 %s 的验证码</string>
+    <string name="cd_pin_token">置顶令牌</string>
+    <string name="cd_unpin_token">取消置顶令牌</string>
+    <string name="cd_delete_token">删除令牌</string>
+    <string name="cd_countdown">剩余 %d 秒</string>
+    <string name="cd_unlock">点击解锁</string>
+    <string name="cd_back">返回</string>
+</resources>

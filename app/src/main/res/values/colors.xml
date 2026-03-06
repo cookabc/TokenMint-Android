@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="token_mint_accent">#FF6C63FF</color>
+    <color name="token_mint_background_light">#FFFFFFFF</color>
+    <color name="token_mint_background_dark">#FF121212</color>
+    <color name="ic_launcher_background">#FF6C63FF</color>
+</resources>
