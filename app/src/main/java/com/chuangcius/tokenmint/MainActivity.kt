@@ -31,7 +31,6 @@ import com.chuangcius.tokenmint.ui.theme.TokenMintTheme
 import com.chuangcius.tokenmint.ui.viewmodels.VaultViewModel
 
 class MainActivity : FragmentActivity() {
-
     private companion object {
         const val CAMERA_PERMISSION_REQUEST_CODE = 1001
     }
@@ -45,12 +44,13 @@ class MainActivity : FragmentActivity() {
 
     // File import picker — same reason
     private var importFileCallback: ((Uri?) -> Unit)? = null
-    private val importFileLauncher = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri ->
-        importFileCallback?.invoke(uri)
-        importFileCallback = null
-    }
+    private val importFileLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.OpenDocument(),
+        ) { uri ->
+            importFileCallback?.invoke(uri)
+            importFileCallback = null
+        }
 
     private fun launchImportFilePicker(callback: (Uri?) -> Unit) {
         importFileCallback = callback
@@ -70,14 +70,15 @@ class MainActivity : FragmentActivity() {
 
         // Initialise camera permission state
         _hasCameraPermission = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.CAMERA
+            this,
+            Manifest.permission.CAMERA,
         ) == PackageManager.PERMISSION_GRANTED
 
         setContent {
             TokenMintTheme {
                 if (isLocked) {
                     LockScreen(
-                        onAuthenticate = { promptBiometric() }
+                        onAuthenticate = { promptBiometric() },
                     )
                 } else {
                     val navController = rememberNavController()
@@ -88,34 +89,34 @@ class MainActivity : FragmentActivity() {
                         enterTransition = {
                             slideIntoContainer(
                                 AnimatedContentTransitionScope.SlideDirection.Start,
-                                tween(300)
+                                tween(300),
                             ) + fadeIn(tween(300))
                         },
                         exitTransition = {
                             slideOutOfContainer(
                                 AnimatedContentTransitionScope.SlideDirection.Start,
-                                tween(300)
+                                tween(300),
                             ) + fadeOut(tween(300))
                         },
                         popEnterTransition = {
                             slideIntoContainer(
                                 AnimatedContentTransitionScope.SlideDirection.End,
-                                tween(300)
+                                tween(300),
                             ) + fadeIn(tween(300))
                         },
                         popExitTransition = {
                             slideOutOfContainer(
                                 AnimatedContentTransitionScope.SlideDirection.End,
-                                tween(300)
+                                tween(300),
                             ) + fadeOut(tween(300))
-                        }
+                        },
                     ) {
                         composable("tokenList") {
                             TokenListScreen(
                                 viewModel = viewModel,
                                 onNavigateToAdd = { navController.navigate("addToken") },
                                 onNavigateToScan = { navController.navigate("scanner") },
-                                onNavigateToSettings = { navController.navigate("settings") }
+                                onNavigateToSettings = { navController.navigate("settings") },
                             )
                         }
                         composable("addToken") {
@@ -124,7 +125,7 @@ class MainActivity : FragmentActivity() {
                                     viewModel.addToken(token)
                                     navController.popBackStack()
                                 },
-                                onBack = { navController.popBackStack() }
+                                onBack = { navController.popBackStack() },
                             )
                         }
                         composable("scanner") {
@@ -137,7 +138,7 @@ class MainActivity : FragmentActivity() {
                                     viewModel.addToken(token)
                                     navController.popBackStack()
                                 },
-                                onBack = { navController.popBackStack() }
+                                onBack = { navController.popBackStack() },
                             )
                         }
                         composable("settings") {
@@ -146,7 +147,7 @@ class MainActivity : FragmentActivity() {
                                 onBack = { navController.popBackStack() },
                                 onLaunchImportFilePicker = { callback ->
                                     launchImportFilePicker(callback)
-                                }
+                                },
                             )
                         }
                     }
@@ -173,7 +174,7 @@ class MainActivity : FragmentActivity() {
             title = getString(R.string.app_name),
             subtitle = getString(R.string.unlock_vault),
             onSuccess = { isLocked = false },
-            onError = { /* stay locked */ }
+            onError = { /* stay locked */ },
         )
     }
 
@@ -182,14 +183,14 @@ class MainActivity : FragmentActivity() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(Manifest.permission.CAMERA),
-            CAMERA_PERMISSION_REQUEST_CODE
+            CAMERA_PERMISSION_REQUEST_CODE,
         )
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {

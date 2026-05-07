@@ -1,6 +1,11 @@
 package com.chuangcius.tokenmint.ui.screens
 
 import android.util.Log
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -44,11 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import com.chuangcius.tokenmint.R
 import com.chuangcius.tokenmint.data.model.Token
 import com.chuangcius.tokenmint.service.TOTPService
@@ -73,7 +73,7 @@ fun ScannerScreen(
     onRequestCameraPermission: () -> Unit,
     onTokenScanned: (Token) -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var scannedToken by remember { mutableStateOf<Token?>(null) }
     var showError by remember { mutableStateOf(false) }
@@ -91,14 +91,15 @@ fun ScannerScreen(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.scanner_title)) },
-                navigationIcon = { BackButton(onClick = onBack) }
+                navigationIcon = { BackButton(onClick = onBack) },
             )
-        }
+        },
     ) { padding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
         ) {
             if (hasCameraPermission) {
                 CameraPreview(
@@ -113,7 +114,7 @@ fun ScannerScreen(
                         } else {
                             showError = true
                         }
-                    }
+                    },
                 )
 
                 // Scanned token overlay
@@ -121,7 +122,7 @@ fun ScannerScreen(
                     visible = scannedToken != null,
                     enter = slideInVertically { it },
                     exit = slideOutVertically { it },
-                    modifier = Modifier.align(Alignment.BottomCenter)
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 ) {
                     scannedToken?.let { token ->
                         ScannedTokenCard(
@@ -133,7 +134,7 @@ fun ScannerScreen(
                                 scannedToken = null
                                 isScanning = true
                             },
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(16.dp),
                         )
                     }
                 }
@@ -142,24 +143,24 @@ fun ScannerScreen(
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Icon(
                         imageVector = Icons.Default.QrCodeScanner,
                         contentDescription = null,
                         modifier = Modifier.height(64.dp),
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = stringResource(R.string.camera_not_available),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(R.string.camera_not_available_desc),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     )
                 }
             }
@@ -182,7 +183,7 @@ fun ScannerScreen(
                 }) {
                     Text(stringResource(R.string.ok))
                 }
-            }
+            },
         )
     }
 }
@@ -192,35 +193,35 @@ private fun ScannedTokenCard(
     token: Token,
     onAdd: () -> Unit,
     onScanAgain: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.Top,
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = token.issuer,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     if (token.account.isNotEmpty()) {
                         Text(
                             text = token.account,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         )
                     }
                 }
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = null,
-                    tint = TokenMintSuccess
+                    tint = TokenMintSuccess,
                 )
             }
 
@@ -229,13 +230,13 @@ private fun ScannedTokenCard(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
                     onClick = onAdd,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(stringResource(R.string.add_token))
                 }
                 OutlinedButton(
                     onClick = onScanAgain,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(stringResource(R.string.scan_again))
                 }
@@ -248,7 +249,7 @@ private fun ScannedTokenCard(
 @Composable
 private fun CameraPreview(
     isScanning: Boolean,
-    onBarcodeDetected: (String) -> Unit
+    onBarcodeDetected: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -281,46 +282,50 @@ private fun CameraPreview(
                     val provider = cameraProviderFuture.get()
                     cameraProvider = provider
 
-                    val preview = Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
+                    val preview =
+                        Preview.Builder().build().also {
+                            it.setSurfaceProvider(previewView.surfaceProvider)
+                        }
 
-                    val imageAnalysis = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .also { analysis ->
-                            analysis.setAnalyzer(analysisExecutor) { imageProxy ->
-                                val mediaImage = imageProxy.image
-                                if (mediaImage != null && isScanningState.value) {
-                                    val inputImage = InputImage.fromMediaImage(
-                                        mediaImage,
-                                        imageProxy.imageInfo.rotationDegrees
-                                    )
-                                    scanner.process(inputImage)
-                                        .addOnSuccessListener { barcodes ->
-                                            for (barcode in barcodes) {
-                                                if (barcode.format == Barcode.FORMAT_QR_CODE) {
-                                                    barcode.rawValue?.let(
-                                                        onBarcodeDetectedState.value
-                                                    )
+                    val imageAnalysis =
+                        ImageAnalysis
+                            .Builder()
+                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                            .build()
+                            .also { analysis ->
+                                analysis.setAnalyzer(analysisExecutor) { imageProxy ->
+                                    val mediaImage = imageProxy.image
+                                    if (mediaImage != null && isScanningState.value) {
+                                        val inputImage =
+                                            InputImage.fromMediaImage(
+                                                mediaImage,
+                                                imageProxy.imageInfo.rotationDegrees,
+                                            )
+                                        scanner
+                                            .process(inputImage)
+                                            .addOnSuccessListener { barcodes ->
+                                                for (barcode in barcodes) {
+                                                    if (barcode.format == Barcode.FORMAT_QR_CODE) {
+                                                        barcode.rawValue?.let(
+                                                            onBarcodeDetectedState.value,
+                                                        )
+                                                    }
                                                 }
+                                            }.addOnCompleteListener {
+                                                imageProxy.close()
                                             }
-                                        }
-                                        .addOnCompleteListener {
-                                            imageProxy.close()
-                                        }
-                                } else {
-                                    imageProxy.close()
+                                    } else {
+                                        imageProxy.close()
+                                    }
                                 }
                             }
-                        }
 
                     provider.unbindAll()
                     provider.bindToLifecycle(
                         lifecycleOwner,
                         CameraSelector.DEFAULT_BACK_CAMERA,
                         preview,
-                        imageAnalysis
+                        imageAnalysis,
                     )
                 } catch (e: Exception) {
                     Log.e("ScannerScreen", "Camera setup failed", e)
@@ -328,6 +333,6 @@ private fun CameraPreview(
             }, ContextCompat.getMainExecutor(ctx))
 
             previewView
-        }
+        },
     )
 }

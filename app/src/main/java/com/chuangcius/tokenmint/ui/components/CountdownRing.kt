@@ -28,7 +28,7 @@ import com.chuangcius.tokenmint.ui.theme.TokenMintCountdownUrgent
 fun CountdownRing(
     progress: Float,
     remaining: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val ringColor = if (remaining <= 5) TokenMintCountdownUrgent else TokenMintCountdown
     val trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
@@ -49,7 +49,7 @@ fun CountdownRing(
             useCenter = false,
             topLeft = topLeft,
             size = arcSize,
-            style = Stroke(width = strokeWidth)
+            style = Stroke(width = strokeWidth),
         )
 
         // Progress arc
@@ -60,24 +60,26 @@ fun CountdownRing(
             useCenter = false,
             topLeft = topLeft,
             size = arcSize,
-            style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+            style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
         )
 
         // Center text
         val text = remaining.toString()
-        val textStyle = TextStyle(
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Medium,
-            fontFamily = FontFamily.Default,
-            color = textColor
-        )
+        val textStyle =
+            TextStyle(
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = FontFamily.Default,
+                color = textColor,
+            )
         val textLayoutResult = textMeasurer.measure(text, textStyle)
         drawText(
             textLayoutResult = textLayoutResult,
-            topLeft = Offset(
-                (size.width - textLayoutResult.size.width) / 2,
-                (size.height - textLayoutResult.size.height) / 2
-            )
+            topLeft =
+                Offset(
+                    (size.width - textLayoutResult.size.width) / 2,
+                    (size.height - textLayoutResult.size.height) / 2,
+                ),
         )
     }
 }

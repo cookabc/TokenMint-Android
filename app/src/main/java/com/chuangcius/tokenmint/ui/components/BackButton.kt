@@ -13,7 +13,7 @@ fun BackButton(onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = stringResource(R.string.cd_back)
+            contentDescription = stringResource(R.string.cd_back),
         )
     }
 }

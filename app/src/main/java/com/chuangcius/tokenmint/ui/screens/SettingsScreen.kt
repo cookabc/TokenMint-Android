@@ -53,7 +53,7 @@ fun SettingsScreen(
     viewModel: VaultViewModel,
     onBack: () -> Unit,
     onLaunchImportFilePicker: ((Uri?) -> Unit) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
@@ -71,24 +71,26 @@ fun SettingsScreen(
     var importAlertMessage by remember { mutableStateOf<String?>(null) }
 
     val activity = context as? FragmentActivity
-    val canBiometric = remember {
-        activity?.let { BiometricService.canAuthenticate(it) } ?: false
-    }
+    val canBiometric =
+        remember {
+            activity?.let { BiometricService.canAuthenticate(it) } ?: false
+        }
 
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings)) },
-                navigationIcon = { BackButton(onClick = onBack) }
+                navigationIcon = { BackButton(onClick = onBack) },
             )
-        }
+        },
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState()),
         ) {
             // Security section
             if (canBiometric) {
@@ -99,7 +101,7 @@ fun SettingsScreen(
                     onCheckedChange = {
                         biometricEnabled = it
                         prefs.edit().putBoolean("biometric_enabled", it).apply()
-                    }
+                    },
                 )
                 HorizontalDivider()
             }
@@ -112,7 +114,7 @@ fun SettingsScreen(
                 onCheckedChange = {
                     hapticEnabled = it
                     prefs.edit().putBoolean("haptic_enabled", it).apply()
-                }
+                },
             )
             HorizontalDivider()
 
@@ -121,7 +123,7 @@ fun SettingsScreen(
                 onSelect = {
                     selectedTheme = it
                     prefs.edit().putInt("theme", it).apply()
-                }
+                },
             )
             HorizontalDivider()
 
@@ -132,15 +134,16 @@ fun SettingsScreen(
                 icon = { Icon(Icons.Default.FileUpload, contentDescription = null) },
                 onClick = {
                     val json = viewModel.exportVault()
-                    val sendIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, json)
-                        type = "application/json"
-                    }
+                    val sendIntent =
+                        Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, json)
+                            type = "application/json"
+                        }
                     context.startActivity(
-                        Intent.createChooser(sendIntent, context.getString(R.string.export_vault))
+                        Intent.createChooser(sendIntent, context.getString(R.string.export_vault)),
                     )
-                }
+                },
             )
             HorizontalDivider()
             ClickableRow(
@@ -150,20 +153,23 @@ fun SettingsScreen(
                     onLaunchImportFilePicker { uri ->
                         if (uri == null) return@onLaunchImportFilePicker
                         try {
-                            val json = context.contentResolver.openInputStream(uri)
-                                ?.bufferedReader()?.use { it.readText() }
-                                ?: return@onLaunchImportFilePicker
+                            val json =
+                                context.contentResolver
+                                    .openInputStream(uri)
+                                    ?.bufferedReader()
+                                    ?.use { it.readText() }
+                                    ?: return@onLaunchImportFilePicker
                             viewModel.importVault(json) { result ->
                                 result
                                     .onSuccess { count ->
                                         importAlertMessage =
                                             context.getString(R.string.import_success, count)
-                                    }
-                                    .onFailure { e ->
-                                        importAlertMessage = context.getString(
-                                            R.string.import_failed,
-                                            e.message ?: "Unknown"
-                                        )
+                                    }.onFailure { e ->
+                                        importAlertMessage =
+                                            context.getString(
+                                                R.string.import_failed,
+                                                e.message ?: "Unknown",
+                                            )
                                     }
                             }
                         } catch (e: Exception) {
@@ -171,7 +177,7 @@ fun SettingsScreen(
                                 context.getString(R.string.import_failed, e.message ?: "Unknown")
                         }
                     }
-                }
+                },
             )
             HorizontalDivider()
 
@@ -179,12 +185,12 @@ fun SettingsScreen(
             SectionTitle(stringResource(R.string.about))
             InfoRow(
                 label = stringResource(R.string.version),
-                value = getAppVersion(context)
+                value = getAppVersion(context),
             )
             HorizontalDivider()
             InfoRow(
                 label = stringResource(R.string.tokens_count),
-                value = viewModel.tokenCount.toString()
+                value = viewModel.tokenCount.toString(),
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -201,7 +207,7 @@ fun SettingsScreen(
                 TextButton(onClick = { importAlertMessage = null }) {
                     Text(stringResource(R.string.ok))
                 }
-            }
+            },
         )
     }
 }
@@ -214,7 +220,7 @@ private fun SectionTitle(title: String) {
         text = title,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
     )
 }
 
@@ -222,19 +228,20 @@ private fun SectionTitle(title: String) {
 private fun SwitchRow(
     label: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) }
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { onCheckedChange(!checked) }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
@@ -243,31 +250,33 @@ private fun SwitchRow(
 @Composable
 private fun ThemeRow(
     selected: Int,
-    onSelect: (Int) -> Unit
+    onSelect: (Int) -> Unit,
 ) {
-    val themes = listOf(
-        stringResource(R.string.theme_system),
-        stringResource(R.string.theme_light),
-        stringResource(R.string.theme_dark)
-    )
+    val themes =
+        listOf(
+            stringResource(R.string.theme_system),
+            stringResource(R.string.theme_light),
+            stringResource(R.string.theme_dark),
+        )
     var expanded by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = true }
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { expanded = true }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.theme),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Text(
             text = themes[selected],
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
         )
     }
 
@@ -283,14 +292,14 @@ private fun ThemeRow(
                                 onSelect(index)
                                 expanded = false
                             },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(label)
                         }
                     }
                 }
             },
-            confirmButton = {}
+            confirmButton = {},
         )
     }
 }
@@ -299,51 +308,56 @@ private fun ThemeRow(
 private fun ClickableRow(
     label: String,
     icon: @Composable () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         icon()
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 12.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp),
         )
     }
 }
 
 @Composable
-private fun InfoRow(label: String, value: String) {
+private fun InfoRow(
+    label: String,
+    value: String,
+) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
         )
     }
 }
 
-private fun getAppVersion(context: Context): String {
-    return try {
+private fun getAppVersion(context: Context): String =
+    try {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "1.0"
     } catch (_: Exception) {
         "1.0"
     }
-}

@@ -71,7 +71,7 @@ fun TokenListScreen(
     onNavigateToAdd: () -> Unit,
     onNavigateToScan: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -95,7 +95,7 @@ fun TokenListScreen(
                     IconButton(onClick = onNavigateToSettings) {
                         Icon(
                             imageVector = Icons.Default.Settings,
-                            contentDescription = stringResource(R.string.cd_settings)
+                            contentDescription = stringResource(R.string.cd_settings),
                         )
                     }
                 },
@@ -104,12 +104,12 @@ fun TokenListScreen(
                         IconButton(onClick = { showAddMenu = true }) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = stringResource(R.string.cd_add_token)
+                                contentDescription = stringResource(R.string.cd_add_token),
                             )
                         }
                         DropdownMenu(
                             expanded = showAddMenu,
-                            onDismissRequest = { showAddMenu = false }
+                            onDismissRequest = { showAddMenu = false },
                         ) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.add_manually)) },
@@ -119,7 +119,7 @@ fun TokenListScreen(
                                 onClick = {
                                     showAddMenu = false
                                     onNavigateToAdd()
-                                }
+                                },
                             )
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.scan_qr_code)) },
@@ -129,21 +129,22 @@ fun TokenListScreen(
                                 onClick = {
                                     showAddMenu = false
                                     onNavigateToScan()
-                                }
+                                },
                             )
                         }
                     }
-                }
+                },
             )
-        }
+        },
     ) { padding ->
         when (val s = state) {
             is VaultState.Loading -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(padding),
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
                 }
@@ -151,16 +152,17 @@ fun TokenListScreen(
 
             is VaultState.Error -> {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(padding),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = s.message,
                         style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     TextButton(onClick = { viewModel.loadVault() }) {
@@ -176,7 +178,7 @@ fun TokenListScreen(
                     onSearchQueryChange = { searchQuery = it },
                     onDeleteToken = { viewModel.deleteToken(it) },
                     onTogglePin = { viewModel.togglePin(it) },
-                    modifier = Modifier.padding(padding)
+                    modifier = Modifier.padding(padding),
                 )
             }
         }
@@ -190,26 +192,27 @@ private fun TokenListContent(
     onSearchQueryChange: (String) -> Unit,
     onDeleteToken: (Token) -> Unit,
     onTogglePin: (Token) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val filteredTokens = remember(tokens, searchQuery) {
-        if (searchQuery.isBlank()) {
-            tokens
-        } else {
-            val query = searchQuery.lowercase()
-            tokens.filter {
-                it.issuer.lowercase().contains(query) ||
-                    it.account.lowercase().contains(query)
+    val filteredTokens =
+        remember(tokens, searchQuery) {
+            if (searchQuery.isBlank()) {
+                tokens
+            } else {
+                val query = searchQuery.lowercase()
+                tokens.filter {
+                    it.issuer.lowercase().contains(query) ||
+                        it.account.lowercase().contains(query)
+                }
             }
         }
-    }
 
     Column(modifier = modifier.fillMaxSize()) {
         // Search bar
         if (tokens.isNotEmpty()) {
             SearchBar(
                 query = searchQuery,
-                onQueryChange = onSearchQueryChange
+                onQueryChange = onSearchQueryChange,
             )
         }
 
@@ -218,19 +221,19 @@ private fun TokenListContent(
         } else if (filteredTokens.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = "No results",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 )
             }
         } else {
             TokenList(
                 tokens = filteredTokens,
                 onDelete = onDeleteToken,
-                onTogglePin = onTogglePin
+                onTogglePin = onTogglePin,
             )
         }
     }
@@ -239,22 +242,24 @@ private fun TokenListContent(
 @Composable
 private fun SearchBar(
     query: String,
-    onQueryChange: (String) -> Unit
+    onQueryChange: (String) -> Unit,
 ) {
     TextField(
         value = query,
         onValueChange = onQueryChange,
         placeholder = { Text(stringResource(R.string.search_tokens)) },
         singleLine = true,
-        colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+        colors =
+            TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
     )
 }
 
@@ -263,25 +268,26 @@ private fun SearchBar(
 private fun TokenList(
     tokens: List<Token>,
     onDelete: (Token) -> Unit,
-    onTogglePin: (Token) -> Unit
+    onTogglePin: (Token) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(items = tokens, key = { it.id }) { token ->
-            val dismissState = rememberSwipeToDismissBoxState(
-                confirmValueChange = { value ->
-                    when (value) {
-                        SwipeToDismissBoxValue.EndToStart -> {
-                            onDelete(token)
-                            true
+            val dismissState =
+                rememberSwipeToDismissBoxState(
+                    confirmValueChange = { value ->
+                        when (value) {
+                            SwipeToDismissBoxValue.EndToStart -> {
+                                onDelete(token)
+                                true
+                            }
+                            SwipeToDismissBoxValue.StartToEnd -> {
+                                onTogglePin(token)
+                                false // Reset the swipe, don't stay dismissed
+                            }
+                            SwipeToDismissBoxValue.Settled -> false
                         }
-                        SwipeToDismissBoxValue.StartToEnd -> {
-                            onTogglePin(token)
-                            false // Reset the swipe, don't stay dismissed
-                        }
-                        SwipeToDismissBoxValue.Settled -> false
-                    }
-                }
-            )
+                    },
+                )
 
             SwipeToDismissBox(
                 state = dismissState,
@@ -296,45 +302,49 @@ private fun TokenList(
                                 TokenMintAccent.copy(alpha = 0.2f)
                             else -> Color.Transparent
                         },
-                        label = "swipe-bg"
+                        label = "swipe-bg",
                     )
 
-                    val alignment = when (direction) {
-                        SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
-                        else -> Alignment.CenterStart
-                    }
+                    val alignment =
+                        when (direction) {
+                            SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+                            else -> Alignment.CenterStart
+                        }
 
-                    val icon = when (direction) {
-                        SwipeToDismissBoxValue.EndToStart -> Icons.Default.Delete
-                        else -> Icons.Default.PushPin
-                    }
+                    val icon =
+                        when (direction) {
+                            SwipeToDismissBoxValue.EndToStart -> Icons.Default.Delete
+                            else -> Icons.Default.PushPin
+                        }
 
-                    val tint = when (direction) {
-                        SwipeToDismissBoxValue.EndToStart ->
-                            MaterialTheme.colorScheme.onErrorContainer
-                        else -> TokenMintAccent
-                    }
+                    val tint =
+                        when (direction) {
+                            SwipeToDismissBoxValue.EndToStart ->
+                                MaterialTheme.colorScheme.onErrorContainer
+                            else -> TokenMintAccent
+                        }
 
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(bgColor)
-                            .padding(horizontal = 20.dp),
-                        contentAlignment = alignment
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .background(bgColor)
+                                .padding(horizontal = 20.dp),
+                        contentAlignment = alignment,
                     ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = tint
+                            tint = tint,
                         )
                     }
                 },
                 enableDismissFromStartToEnd = true,
-                enableDismissFromEndToStart = true
+                enableDismissFromEndToStart = true,
             ) {
                 TokenRow(
                     token = token,
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface),
                 )
             }
             HorizontalDivider()
@@ -347,17 +357,17 @@ private fun EmptyState() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = stringResource(R.string.no_tokens_title),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.no_tokens_description),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
         )
     }
 }

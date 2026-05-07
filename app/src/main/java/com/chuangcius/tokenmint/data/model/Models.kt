@@ -18,11 +18,12 @@ object UUIDSerializer : KSerializer<UUID> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: UUID) =
-        encoder.encodeString(value.toString())
+    override fun serialize(
+        encoder: Encoder,
+        value: UUID,
+    ) = encoder.encodeString(value.toString())
 
-    override fun deserialize(decoder: Decoder): UUID =
-        UUID.fromString(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): UUID = UUID.fromString(decoder.decodeString())
 }
 
 object InstantSerializer : KSerializer<Instant> {
@@ -31,27 +32,36 @@ object InstantSerializer : KSerializer<Instant> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("Instant", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: Instant) =
-        encoder.encodeString(formatter.format(value))
+    override fun serialize(
+        encoder: Encoder,
+        value: Instant,
+    ) = encoder.encodeString(formatter.format(value))
 
-    override fun deserialize(decoder: Decoder): Instant =
-        Instant.parse(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): Instant = Instant.parse(decoder.decodeString())
 }
 
 // MARK: - TOTPAlgorithm
 
 @Serializable
 enum class TOTPAlgorithm {
-    @SerialName("sha1") SHA1,
-    @SerialName("sha256") SHA256,
-    @SerialName("sha512") SHA512;
+    @SerialName("sha1")
+    SHA1,
+
+    @SerialName("sha256")
+    SHA256,
+
+    @SerialName("sha512")
+    SHA512,
+
+    ;
 
     val hmacAlgorithm: String
-        get() = when (this) {
-            SHA1 -> "HmacSHA1"
-            SHA256 -> "HmacSHA256"
-            SHA512 -> "HmacSHA512"
-        }
+        get() =
+            when (this) {
+                SHA1 -> "HmacSHA1"
+                SHA256 -> "HmacSHA256"
+                SHA512 -> "HmacSHA512"
+            }
 }
 
 // MARK: - Token
@@ -70,7 +80,7 @@ data class Token(
     val sortOrder: Int = 0,
     val isPinned: Boolean = false,
     @Serializable(with = InstantSerializer::class)
-    val updatedAt: Instant = Instant.now()
+    val updatedAt: Instant = Instant.now(),
 ) {
     /** Normalize secret: uppercase, strip spaces. */
     val normalizedSecret: String
@@ -85,14 +95,14 @@ data class Vault(
     val vaultVersion: Int = 0,
     val schemaVersion: Int = 1,
     @Serializable(with = InstantSerializer::class)
-    val updatedAt: Instant = Instant.now()
+    val updatedAt: Instant = Instant.now(),
 )
 
 // MARK: - EncryptedVault
 
 @Serializable
 data class EncryptedVault(
-    val ciphertext: String,   // Base64
-    val iv: String,           // Base64 (GCM nonce)
-    val schemaVersion: Int
+    val ciphertext: String, // Base64
+    val iv: String, // Base64 (GCM nonce)
+    val schemaVersion: Int,
 )

@@ -41,9 +41,9 @@ import androidx.compose.ui.unit.dp
 import com.chuangcius.tokenmint.R
 import com.chuangcius.tokenmint.data.model.Token
 import com.chuangcius.tokenmint.service.TOTPService
+import com.chuangcius.tokenmint.ui.theme.TOTPCodeStyle
 import com.chuangcius.tokenmint.ui.theme.TokenMintAccent
 import com.chuangcius.tokenmint.ui.theme.TokenMintSuccess
-import com.chuangcius.tokenmint.ui.theme.TOTPCodeStyle
 import kotlinx.coroutines.delay
 
 /**
@@ -53,7 +53,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun TokenRow(
     token: Token,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var code by remember { mutableStateOf("") }
     var remaining by remember { mutableIntStateOf(token.period) }
@@ -84,17 +84,17 @@ fun TokenRow(
     }
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable {
-                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                clipboard.setPrimaryClip(ClipData.newPlainText("TOTP", code))
-                view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                copied = true
-            }
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .semantics { contentDescription = copyDesc },
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(ClipData.newPlainText("TOTP", code))
+                    view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                    copied = true
+                }.padding(horizontal = 16.dp, vertical = 12.dp)
+                .semantics { contentDescription = copyDesc },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         // Left: issuer + account
         Column(modifier = Modifier.weight(1f)) {
@@ -104,13 +104,13 @@ fun TokenRow(
                         imageVector = Icons.Default.PushPin,
                         contentDescription = null,
                         tint = TokenMintAccent,
-                        modifier = Modifier.padding(end = 4.dp)
+                        modifier = Modifier.padding(end = 4.dp),
                     )
                 }
                 Text(
                     text = token.issuer,
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1
+                    maxLines = 1,
                 )
             }
             if (token.account.isNotEmpty()) {
@@ -118,7 +118,7 @@ fun TokenRow(
                     text = token.account,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    maxLines = 1
+                    maxLines = 1,
                 )
             }
         }
@@ -126,23 +126,23 @@ fun TokenRow(
         // Right: TOTP code + countdown
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
         ) {
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = formatCode(code),
                     style = TOTPCodeStyle,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 AnimatedVisibility(
                     visible = copied,
                     enter = slideInVertically { it } + fadeIn(),
-                    exit = slideOutVertically { it } + fadeOut()
+                    exit = slideOutVertically { it } + fadeOut(),
                 ) {
                     Text(
                         text = stringResource(R.string.copied),
                         style = MaterialTheme.typography.labelSmall,
-                        color = TokenMintSuccess
+                        color = TokenMintSuccess,
                     )
                 }
             }

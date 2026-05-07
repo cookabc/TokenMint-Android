@@ -32,7 +32,7 @@ import com.chuangcius.tokenmint.service.BiometricService
 @Composable
 fun LockScreen(
     onAuthenticate: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val unlockDesc = stringResource(R.string.cd_unlock)
 
@@ -42,29 +42,29 @@ fun LockScreen(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onAuthenticate
-            )
-            .semantics { contentDescription = unlockDesc },
+        modifier =
+            modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onAuthenticate,
+                ).semantics { contentDescription = unlockDesc },
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             imageVector = Icons.Default.Fingerprint,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-            modifier = Modifier.height(80.dp)
+            modifier = Modifier.height(80.dp),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -72,7 +72,7 @@ fun LockScreen(
         Text(
             text = stringResource(R.string.tap_to_unlock),
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
         )
     }
 }

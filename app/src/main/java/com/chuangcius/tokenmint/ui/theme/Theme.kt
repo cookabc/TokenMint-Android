@@ -11,36 +11,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColorScheme = lightColorScheme(
-    primary = TokenMintAccent,
-    onPrimary = Color.White,
-    primaryContainer = TokenMintAccentLight,
-    secondary = TokenMintAccent,
-    background = TokenMintBackgroundLight,
-    surface = TokenMintSurfaceLight,
-    onBackground = TokenMintOnSurfaceLight,
-    onSurface = TokenMintOnSurfaceLight,
-    error = TokenMintError,
-    onError = Color.White
-)
+private val LightColorScheme =
+    lightColorScheme(
+        primary = TokenMintAccent,
+        onPrimary = Color.White,
+        primaryContainer = TokenMintAccentLight,
+        secondary = TokenMintAccent,
+        background = TokenMintBackgroundLight,
+        surface = TokenMintSurfaceLight,
+        onBackground = TokenMintOnSurfaceLight,
+        onSurface = TokenMintOnSurfaceLight,
+        error = TokenMintError,
+        onError = Color.White,
+    )
 
-private val DarkColorScheme = darkColorScheme(
-    primary = TokenMintAccent,
-    onPrimary = Color.White,
-    primaryContainer = TokenMintAccentLight,
-    secondary = TokenMintAccent,
-    background = TokenMintBackgroundDark,
-    surface = TokenMintSurfaceDark,
-    onBackground = TokenMintOnSurfaceDark,
-    onSurface = TokenMintOnSurfaceDark,
-    error = TokenMintError,
-    onError = Color.White
-)
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = TokenMintAccent,
+        onPrimary = Color.White,
+        primaryContainer = TokenMintAccentLight,
+        secondary = TokenMintAccent,
+        background = TokenMintBackgroundDark,
+        surface = TokenMintSurfaceDark,
+        onBackground = TokenMintOnSurfaceDark,
+        onSurface = TokenMintOnSurfaceDark,
+        error = TokenMintError,
+        onError = Color.White,
+    )
 
 @Composable
 fun TokenMintTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
@@ -55,6 +57,6 @@ fun TokenMintTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = TokenMintTypography,
-        content = content
+        content = content,
     )
 }

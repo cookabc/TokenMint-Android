@@ -15,7 +15,6 @@ import org.junit.Test
  * and otpauth URL parsing.
  */
 class TOTPServiceTest {
-
     // RFC 6238 test vector: ASCII "12345678901234567890" = Base32 "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"
     private val testSecret = "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"
 
@@ -71,7 +70,7 @@ class TOTPServiceTest {
     @Test
     fun `isValidBase32 rejects invalid strings`() {
         assertFalse(TOTPService.isValidBase32(""))
-        assertFalse(TOTPService.isValidBase32("01234"))  // contains 0, 1
+        assertFalse(TOTPService.isValidBase32("01234")) // contains 0, 1
         assertFalse(TOTPService.isValidBase32("hello!"))
     }
 

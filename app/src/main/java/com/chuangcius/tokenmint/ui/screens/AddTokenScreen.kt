@@ -48,7 +48,7 @@ import com.chuangcius.tokenmint.ui.components.BackButton
 fun AddTokenScreen(
     onSave: (Token) -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var issuer by rememberSaveable { mutableStateOf("") }
     var account by rememberSaveable { mutableStateOf("") }
@@ -68,33 +68,35 @@ fun AddTokenScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            val token = Token(
-                                issuer = issuer.trim(),
-                                account = account.trim(),
-                                secret = secret.trim(),
-                                digits = digits,
-                                period = period,
-                                algorithm = algorithm
-                            )
+                            val token =
+                                Token(
+                                    issuer = issuer.trim(),
+                                    account = account.trim(),
+                                    secret = secret.trim(),
+                                    digits = digits,
+                                    period = period,
+                                    algorithm = algorithm,
+                                )
                             onSave(token)
                         },
-                        enabled = isValid
+                        enabled = isValid,
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = stringResource(R.string.save)
+                            contentDescription = stringResource(R.string.save),
                         )
                     }
-                }
+                },
             )
-        }
+        },
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()),
         ) {
             // Account Info
             SectionHeader(stringResource(R.string.account_info))
@@ -104,7 +106,7 @@ fun AddTokenScreen(
                 onValueChange = { issuer = it },
                 label = { Text(stringResource(R.string.issuer_hint)) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -114,7 +116,7 @@ fun AddTokenScreen(
                 onValueChange = { account = it },
                 label = { Text(stringResource(R.string.account_hint)) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -127,11 +129,12 @@ fun AddTokenScreen(
                 onValueChange = { secret = it },
                 label = { Text(stringResource(R.string.secret_hint)) },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Characters
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Characters,
+                    ),
                 isError = secret.isNotEmpty() && !TOTPService.isValidBase32(secret),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +146,7 @@ fun AddTokenScreen(
                 label = stringResource(R.string.digits),
                 options = listOf(6 to "6", 8 to "8"),
                 selected = digits,
-                onSelect = { digits = it }
+                onSelect = { digits = it },
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -152,14 +155,14 @@ fun AddTokenScreen(
                 label = stringResource(R.string.period),
                 options = listOf(30 to "30s", 60 to "60s"),
                 selected = period,
-                onSelect = { period = it }
+                onSelect = { period = it },
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             AlgorithmPicker(
                 selected = algorithm,
-                onSelect = { algorithm = it }
+                onSelect = { algorithm = it },
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -173,7 +176,7 @@ private fun SectionHeader(title: String) {
         text = title,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = Modifier.padding(vertical = 8.dp),
     )
 }
 
@@ -183,14 +186,14 @@ private fun <T> DropdownPicker(
     label: String,
     options: List<Pair<T, String>>,
     selected: T,
-    onSelect: (T) -> Unit
+    onSelect: (T) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedLabel = options.first { it.first == selected }.second
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it }
+        onExpandedChange = { expanded = it },
     ) {
         OutlinedTextField(
             value = selectedLabel,
@@ -198,13 +201,14 @@ private fun <T> DropdownPicker(
             readOnly = true,
             label = { Text(label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             options.forEach { (value, text) ->
                 DropdownMenuItem(
@@ -212,7 +216,7 @@ private fun <T> DropdownPicker(
                     onClick = {
                         onSelect(value)
                         expanded = false
-                    }
+                    },
                 )
             }
         }
@@ -223,13 +227,13 @@ private fun <T> DropdownPicker(
 @Composable
 private fun AlgorithmPicker(
     selected: TOTPAlgorithm,
-    onSelect: (TOTPAlgorithm) -> Unit
+    onSelect: (TOTPAlgorithm) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it }
+        onExpandedChange = { expanded = it },
     ) {
         OutlinedTextField(
             value = selected.name,
@@ -237,13 +241,14 @@ private fun AlgorithmPicker(
             readOnly = true,
             label = { Text(stringResource(R.string.algorithm)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             TOTPAlgorithm.entries.forEach { algo ->
                 DropdownMenuItem(
@@ -251,7 +256,7 @@ private fun AlgorithmPicker(
                     onClick = {
                         onSelect(algo)
                         expanded = false
-                    }
+                    },
                 )
             }
         }

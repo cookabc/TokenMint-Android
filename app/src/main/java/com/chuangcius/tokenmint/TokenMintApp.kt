@@ -4,7 +4,6 @@ import android.app.Application
 import com.chuangcius.tokenmint.data.repository.VaultRepository
 
 class TokenMintApp : Application() {
-
     lateinit var vaultRepository: VaultRepository
         private set
 
