@@ -42,21 +42,35 @@ sealed class AppError(
 fun humanizeError(message: String): String =
     when {
         message.contains("UnknownHostException", ignoreCase = true) ||
-            message.contains("No address associated", ignoreCase = true) ->
+            message.contains("No address associated", ignoreCase = true) -> {
             "No internet connection"
+        }
+
         message.contains("SocketTimeoutException", ignoreCase = true) ||
-            message.contains("timeout", ignoreCase = true) ->
+            message.contains("timeout", ignoreCase = true) -> {
             "Request timed out — try again"
+        }
+
         message.contains("KeyStoreException", ignoreCase = true) ||
-            message.contains("KeyStore", ignoreCase = true) ->
+            message.contains("KeyStore", ignoreCase = true) -> {
             "Security key error — try again"
+        }
+
         message.contains("AEADBadTagException", ignoreCase = true) ||
-            message.contains("decrypt", ignoreCase = true) ->
+            message.contains("decrypt", ignoreCase = true) -> {
             "Vault decryption failed — data may be corrupted"
+        }
+
         message.contains("Biometric", ignoreCase = true) ||
-            message.contains("authenticate", ignoreCase = true) ->
+            message.contains("authenticate", ignoreCase = true) -> {
             "Authentication failed"
-        message.contains("camera", ignoreCase = true) ->
+        }
+
+        message.contains("camera", ignoreCase = true) -> {
             "Camera access denied"
-        else -> "Something went wrong"
+        }
+
+        else -> {
+            "Something went wrong"
+        }
     }

@@ -280,11 +280,15 @@ private fun TokenList(
                                 onDelete(token)
                                 true
                             }
+
                             SwipeToDismissBoxValue.StartToEnd -> {
                                 onTogglePin(token)
                                 false // Reset the swipe, don't stay dismissed
                             }
-                            SwipeToDismissBoxValue.Settled -> false
+
+                            SwipeToDismissBoxValue.Settled -> {
+                                false
+                            }
                         }
                     },
                 )
@@ -296,11 +300,17 @@ private fun TokenList(
 
                     val bgColor by animateColorAsState(
                         when (direction) {
-                            SwipeToDismissBoxValue.EndToStart ->
+                            SwipeToDismissBoxValue.EndToStart -> {
                                 MaterialTheme.colorScheme.errorContainer
-                            SwipeToDismissBoxValue.StartToEnd ->
+                            }
+
+                            SwipeToDismissBoxValue.StartToEnd -> {
                                 TokenMintAccent.copy(alpha = 0.2f)
-                            else -> Color.Transparent
+                            }
+
+                            else -> {
+                                Color.Transparent
+                            }
                         },
                         label = "swipe-bg",
                     )
@@ -319,9 +329,13 @@ private fun TokenList(
 
                     val tint =
                         when (direction) {
-                            SwipeToDismissBoxValue.EndToStart ->
+                            SwipeToDismissBoxValue.EndToStart -> {
                                 MaterialTheme.colorScheme.onErrorContainer
-                            else -> TokenMintAccent
+                            }
+
+                            else -> {
+                                TokenMintAccent
+                            }
                         }
 
                     Box(
